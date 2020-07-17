@@ -34,30 +34,6 @@ import java.util.List;
 @Mod.EventBusSubscriber(modid = Waila.MODID, value = Dist.CLIENT)
 public class WailaClient {
 
-    static {
-        try {
-            MethodHandles.Lookup lookup = MethodHandles.lookup();
-
-            Field _sortedList = ModList.class.getDeclaredField("sortedList");
-            _sortedList.setAccessible(true);
-            MethodHandle _getSortedList = lookup.unreflectGetter(_sortedList);
-
-            List<ModInfo> sortedList = (List<ModInfo>) _getSortedList.invokeExact((ModList) ModList.get());
-            ModInfo wailaInfo = sortedList.stream().filter(modInfo -> modInfo.getModId().equals(Waila.MODID)).findFirst().get();
-            WailaModInfo modInfo = new WailaModInfo(wailaInfo);
-            sortedList.set(sortedList.indexOf(wailaInfo), new WailaModInfo(wailaInfo));
-
-            ModContainer wailaContainer = ModList.get().getModContainerById(Waila.MODID).get();
-            Field _modInfo = ModContainer.class.getDeclaredField("modInfo");
-            _modInfo.setAccessible(true);
-            MethodHandle _setModInfo = lookup.unreflectSetter(_modInfo);
-            _setModInfo.invokeExact((ModContainer) wailaContainer, (IModInfo) modInfo);
-        } catch (Throwable e) {
-            e.printStackTrace();
-            Waila.LOGGER.error("Failed to replace ModInfo instance with one that supports the mod list config");
-        }
-    }
-
     public static IForgeKeybinding openConfig;
     public static IForgeKeybinding showOverlay;
     public static IForgeKeybinding toggleLiquid;
@@ -110,16 +86,5 @@ public class WailaClient {
     public static void onClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.END)
             WailaTickHandler.instance().tickClient();
-    }
-
-    private static class WailaModInfo extends ModInfo {
-        public WailaModInfo(ModInfo modInfo) {
-            super(modInfo.getOwningFile(), modInfo.getModConfig());
-        }
-
-        @Override
-        public boolean hasConfigUI() {
-            return true;
-        }
     }
 }

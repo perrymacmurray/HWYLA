@@ -23,11 +23,6 @@ public abstract class OptionsEntryValue<T> extends OptionsListWidget.Entry {
     }
 
     @Override
-    public final void render(int index, int rowTop, int rowLeft, int width, int height, int mouseX, int mouseY, boolean hovered, float deltaTime) {
-        render(null, index, rowTop, rowLeft, width, height, mouseX, mouseY, hovered, deltaTime);
-    }
-
-    @Override
     public void render(MatrixStack matrix, int index, int rowTop, int rowLeft, int width, int height, int mouseX, int mouseY, boolean hovered, float deltaTime) {
         if (matrix == null)
             client.fontRenderer.drawString(matrix ,title.getString(), rowLeft + 10, rowTop + (height / 4) + (client.fontRenderer.FONT_HEIGHT / 2), 16777215); //Replaced drawStringWithShadow with drawString, to remove shadow until I can figure out where to get MatrixStack from

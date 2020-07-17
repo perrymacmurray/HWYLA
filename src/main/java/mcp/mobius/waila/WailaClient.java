@@ -1,5 +1,6 @@
 package mcp.mobius.waila;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import mcp.mobius.waila.api.impl.config.WailaConfig;
 import mcp.mobius.waila.gui.GuiConfigHome;
 import mcp.mobius.waila.overlay.OverlayRenderer;
@@ -37,6 +38,8 @@ public class WailaClient {
     public static IForgeKeybinding openConfig;
     public static IForgeKeybinding showOverlay;
     public static IForgeKeybinding toggleLiquid;
+
+    public static MatrixStack matrix = new MatrixStack(); //I'm not sure exactly how to use a MatrixStack, but I know this isn't it.
 
     public static void initClient() {
         WailaClient.openConfig = new KeyBinding("key.waila.config", KeyConflictContext.IN_GAME, KeyModifier.NONE, InputMappings.Type.KEYSYM.getOrMakeInput(320), Waila.NAME);

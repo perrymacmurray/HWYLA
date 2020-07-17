@@ -1,6 +1,8 @@
 package mcp.mobius.waila.overlay;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import mcp.mobius.waila.WailaClient;
 import mcp.mobius.waila.utils.WailaExceptionHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
@@ -49,7 +51,7 @@ public class DisplayUtil {
             RenderSystem.disableLighting();
             RenderSystem.disableDepthTest();
             RenderSystem.disableBlend();
-            fr.drawString(null, s, (float) (xPosition + 19 - 2 - fr.getStringWidth(s)), (float) (yPosition + 6 + 3), 16777215); //TODO matrixstack
+            fr.drawString(WailaClient.matrix, s, (float) (xPosition + 19 - 2 - fr.getStringWidth(s)), (float) (yPosition + 6 + 3), 16777215); //TODO matrixstack
             RenderSystem.enableLighting();
             RenderSystem.enableDepthTest();
             RenderSystem.enableBlend();

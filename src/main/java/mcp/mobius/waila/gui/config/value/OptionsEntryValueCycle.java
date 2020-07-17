@@ -1,6 +1,7 @@
 package mcp.mobius.waila.gui.config.value;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import mcp.mobius.waila.WailaClient;
 import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
@@ -39,7 +40,7 @@ public class OptionsEntryValueCycle extends OptionsEntryValue<String> {
         this.button.x = x + 135;
         this.button.y = y + entryHeight / 6;
         this.button.setMessage(createLocale ? new TranslationTextComponent(I18n.format(translationKey + "_" + value.replace(" ", "_").toLowerCase(Locale.ROOT))) : new StringTextComponent(value));
-        this.button.render(new MatrixStack(), mouseX, mouseY, partialTicks); //TODO matrixstack
+        this.button.render(WailaClient.matrix, mouseX, mouseY, partialTicks); //TODO matrixstack
     }
 
     @Override

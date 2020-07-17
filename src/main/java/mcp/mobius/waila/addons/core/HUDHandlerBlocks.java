@@ -27,19 +27,19 @@ public class HUDHandlerBlocks implements IComponentProvider {
         if (accessor.getBlockState().getMaterial().isLiquid())
             return;
 
-        ((ITaggableList<ResourceLocation, ITextComponent>) tooltip).setTag(OBJECT_NAME_TAG, new StringTextComponent(String.format(Waila.CONFIG.get().getFormatting().getBlockName(), accessor.getStack().getDisplayName().getFormattedText())));
+        ((ITaggableList<ResourceLocation, ITextComponent>) tooltip).setTag(OBJECT_NAME_TAG, new StringTextComponent(String.format(Waila.CONFIG.get().getFormatting().getBlockName(), accessor.getStack().getDisplayName().getString()))); //replaced .getFormattedText()
         if (config.get(PluginCore.CONFIG_SHOW_REGISTRY))
-            ((ITaggableList<ResourceLocation, ITextComponent>) tooltip).setTag(REGISTRY_NAME_TAG, new StringTextComponent(accessor.getBlock().getRegistryName().toString()).setStyle(new Style().setColor(TextFormatting.GRAY)));
+            ((ITaggableList<ResourceLocation, ITextComponent>) tooltip).setTag(REGISTRY_NAME_TAG, new StringTextComponent(accessor.getBlock().getRegistryName().toString())); //setStyle(new Style(...)) removed
     }
 
     @Override
     public void appendBody(List<ITextComponent> tooltip, IDataAccessor accessor, IPluginConfig config) {
         if (config.get(PluginCore.CONFIG_SHOW_STATES)) {
             BlockState state = accessor.getBlockState();
-            state.getProperties().forEach(p -> {
+            state.func_235904_r_().forEach(p -> { //state.getProperties()
                 Comparable<?> value = state.get(p);
-                ITextComponent valueText = new StringTextComponent(value.toString()).setStyle(new Style().setColor(p instanceof BooleanProperty ? value == Boolean.TRUE ? TextFormatting.GREEN : TextFormatting.RED : TextFormatting.RESET));
-                tooltip.add(new StringTextComponent(p.getName() + ":").appendSibling(valueText));
+                ITextComponent valueText = new StringTextComponent(value.toString()); //setStyle(new Style(...)) removed
+                tooltip.add(new StringTextComponent(p.getName() + ":").func_230529_a_(valueText)); //.appendSibling()
             });
         }
     }

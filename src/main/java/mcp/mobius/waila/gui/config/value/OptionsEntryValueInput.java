@@ -1,8 +1,10 @@
 package mcp.mobius.waila.gui.config.value;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.util.text.StringTextComponent;
 
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -32,7 +34,7 @@ public class OptionsEntryValueInput<T> extends OptionsEntryValue<T> {
     protected void drawValue(int entryWidth, int entryHeight, int x, int y, int mouseX, int mouseY, boolean selected, float partialTicks) {
         textField.x = x + 135;
         textField.y = y + entryHeight / 6;
-        textField.render(mouseX, mouseY, partialTicks);
+        textField.render(new MatrixStack(), mouseX, mouseY, partialTicks); //TODO matrixstack
     }
 
     @Override
@@ -67,7 +69,7 @@ public class OptionsEntryValueInput<T> extends OptionsEntryValue<T> {
         private final OptionsEntryValueInput<?> watcher;
 
         public WatchedTextfield(OptionsEntryValueInput<?> watcher, FontRenderer fontRenderer, int x, int y, int width, int height) {
-            super(fontRenderer, x, y, width, height, "");
+            super(fontRenderer, x, y, width, height, new StringTextComponent(""));
 
             this.watcher = watcher;
         }

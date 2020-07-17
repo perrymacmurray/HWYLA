@@ -1,5 +1,6 @@
 package mcp.mobius.waila.gui.config.value;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import mcp.mobius.waila.gui.config.OptionsListWidget;
 import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.util.text.TextComponent;
@@ -23,7 +24,15 @@ public abstract class OptionsEntryValue<T> extends OptionsListWidget.Entry {
 
     @Override
     public final void render(int index, int rowTop, int rowLeft, int width, int height, int mouseX, int mouseY, boolean hovered, float deltaTime) {
-        client.fontRenderer.drawStringWithShadow(title.getFormattedText(), rowLeft + 10, rowTop + (height / 4) + (client.fontRenderer.FONT_HEIGHT / 2), 16777215);
+        render(null, index, rowTop, rowLeft, width, height, mouseX, mouseY, hovered, deltaTime);
+    }
+
+    @Override
+    public void render(MatrixStack matrix, int index, int rowTop, int rowLeft, int width, int height, int mouseX, int mouseY, boolean hovered, float deltaTime) {
+        if (matrix == null)
+            client.fontRenderer.drawString(matrix ,title.getString(), rowLeft + 10, rowTop + (height / 4) + (client.fontRenderer.FONT_HEIGHT / 2), 16777215); //Replaced drawStringWithShadow with drawString, to remove shadow until I can figure out where to get MatrixStack from
+        else
+            client.fontRenderer.drawStringWithShadow(matrix ,title.getString(), rowLeft + 10, rowTop + (height / 4) + (client.fontRenderer.FONT_HEIGHT / 2), 16777215);
         drawValue(width, height, rowLeft, rowTop, mouseX, mouseY, hovered, deltaTime);
         this.x = rowLeft;
     }

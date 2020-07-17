@@ -1,6 +1,7 @@
 package mcp.mobius.waila.gui;
 
 import com.google.common.collect.Lists;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import mcp.mobius.waila.gui.config.OptionsListWidget;
 import mcp.mobius.waila.gui.config.value.OptionsEntryValue;
 import net.minecraft.client.Minecraft;
@@ -8,7 +9,9 @@ import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.util.text.ITextProperties;
 import net.minecraft.util.text.TextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.List;
 
@@ -40,17 +43,17 @@ public abstract class GuiOptions extends Screen {
         setFocused(options);
 
         if (saver != null && canceller != null) {
-            addButton(new Button(width / 2 - 100, height - 25, 100, 20, I18n.format("gui.done"), w -> {
+            addButton(new Button(width / 2 - 100, height - 25, 100, 20, new TranslationTextComponent(I18n.format("gui.done")), w -> {
                 options.save();
                 saver.run();
                 onClose();
             }));
-            addButton(new Button(width / 2 + 5, height - 25, 100, 20, I18n.format("gui.cancel"), w -> {
+            addButton(new Button(width / 2 + 5, height - 25, 100, 20, new TranslationTextComponent(I18n.format("gui.cancel")), w -> {
                 canceller.run();
                 onClose();
             }));
         } else {
-            addButton(new Button(width / 2 - 50, height - 25, 100, 20, I18n.format("gui.done"), w -> {
+            addButton(new Button(width / 2 - 50, height - 25, 100, 20, new TranslationTextComponent(I18n.format("gui.done")), w -> {
                 options.save();
                 onClose();
             }));
@@ -58,11 +61,11 @@ public abstract class GuiOptions extends Screen {
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float partialTicks) {
-        renderBackground();
+    public void render(MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
+        renderBackground(matrix);
         options.render(mouseX, mouseY, partialTicks);
-        drawCenteredString(font, title.getFormattedText(), width / 2, 12, 16777215);
-        super.render(mouseX, mouseY, partialTicks);
+        drawCenteredString(matrix, font, title.getString(), width / 2, 12, 16777215);
+        super.render(matrix, mouseX, mouseY, partialTicks);
 
         if (mouseY < 32 || mouseY > height - 32)
             return;
@@ -73,13 +76,13 @@ public abstract class GuiOptions extends Screen {
 
             if (I18n.hasKey(value.getDescription())) {
                 int valueX = value.getX() + 10;
-                String title = value.getTitle().getFormattedText();
+                String title = value.getTitle().getString();
                 if (mouseX < valueX || mouseX > valueX + font.getStringWidth(title))
                     return;
 
                 List<String> tooltip = Lists.newArrayList(title);
-                tooltip.addAll(font.listFormattedStringToWidth(I18n.format(value.getDescription()), 200));
-                renderTooltip(tooltip, mouseX, mouseY);
+                tooltip.add(I18n.format(value.getDescription()));
+                renderTooltip(matrix, (ITextProperties) tooltip, mouseX, mouseY); //this might not work
             }
         }
     }
@@ -89,8 +92,9 @@ public abstract class GuiOptions extends Screen {
         minecraft.displayGuiScreen(parent);
     }
 
-    public void addListener(IGuiEventListener listener) {
+    public IGuiEventListener addListener(IGuiEventListener listener) {
         children.add(listener);
+        return listener;
     }
 
     public abstract OptionsListWidget getOptions();

@@ -1,5 +1,6 @@
 package mcp.mobius.waila.gui.config;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import mcp.mobius.waila.gui.GuiOptions;
@@ -34,7 +35,8 @@ public class OptionsListWidget extends AbstractList<OptionsListWidget.Entry> {
     }
 
     public void render(int int_1, int int_2, float float_1) {
-        this.renderBackground();
+        MatrixStack matrix = new MatrixStack(); //TODO matrixstack
+        this.renderBackground(matrix);
         int int_3 = this.getScrollbarPosition();
         int int_4 = int_3 + 6;
         RenderSystem.disableLighting();
@@ -46,10 +48,10 @@ public class OptionsListWidget extends AbstractList<OptionsListWidget.Entry> {
         int int_5 = this.getRowLeft();
         int int_6 = this.y0 + 4 - (int)this.getScrollAmount();
 
-        this.renderList(int_5, int_6, int_1, int_2, float_1);
+        this.renderList(matrix, int_5, int_6, int_1, int_2, float_1);
         RenderSystem.disableDepthTest();
-        this.renderHoleBackground(0, this.y0, 255, 255);
-        this.renderHoleBackground(this.y1, this.height, 255, 255);
+        //this.renderHoleBackground(0, this.y0, 255, 255); TODO replace whatever these did
+        //this.renderHoleBackground(this.y1, this.height, 255, 255);
         RenderSystem.enableBlend();
         RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE);
         RenderSystem.disableAlphaTest();
@@ -90,7 +92,7 @@ public class OptionsListWidget extends AbstractList<OptionsListWidget.Entry> {
             tessellator_1.draw();
         }
 
-        this.renderDecorations(int_1, int_2);
+        this.renderDecorations(matrix, int_1, int_2);
         RenderSystem.enableTexture();
         RenderSystem.shadeModel(7424);
         RenderSystem.enableAlphaTest();
@@ -124,7 +126,5 @@ public class OptionsListWidget extends AbstractList<OptionsListWidget.Entry> {
             this.client = Minecraft.getInstance();
         }
 
-        @Override
-        public abstract void render(int index, int rowTop, int rowLeft, int width, int height, int mouseX, int mouseY, boolean hovered, float deltaTime);
     }
 }

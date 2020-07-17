@@ -1,5 +1,6 @@
 package mcp.mobius.waila.gui;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import mcp.mobius.waila.Waila;
 import mcp.mobius.waila.api.impl.config.PluginConfig;
 import net.minecraft.client.gui.screen.Screen;
@@ -19,13 +20,13 @@ public class GuiConfigHome extends Screen {
 
     @Override
     protected void init() {
-        addButton(new Button(width / 2 - 105, height / 2 - 10, 100, 20, I18n.format("gui.waila.waila_settings", Waila.NAME), w -> {
+        addButton(new Button(width / 2 - 105, height / 2 - 10, 100, 20, new TranslationTextComponent(I18n.format("gui.waila.waila_settings", Waila.NAME)), w -> {
             minecraft.displayGuiScreen(new GuiConfigWaila(GuiConfigHome.this));
         }));
-        addButton(new Button(width / 2 + 5, height / 2 - 10, 100, 20, I18n.format("gui.waila.plugin_settings"), w -> {
+        addButton(new Button(width / 2 + 5, height / 2 - 10, 100, 20, new TranslationTextComponent(I18n.format("gui.waila.plugin_settings")), w -> {
             minecraft.displayGuiScreen(new GuiConfigPlugins(GuiConfigHome.this));
         }));
-        addButton(new Button(width / 2 - 50, height / 2 + 20, 100, 20, I18n.format("gui.done"), w -> {
+        addButton(new Button(width / 2 - 50, height / 2 + 20, 100, 20, new TranslationTextComponent(I18n.format("gui.done")), w -> {
             Waila.CONFIG.save();
             PluginConfig.INSTANCE.save();
             minecraft.displayGuiScreen(parent);
@@ -33,9 +34,9 @@ public class GuiConfigHome extends Screen {
     }
 
     @Override
-    public void render(int x, int y, float partialTicks) {
-        renderBackground();
-        drawCenteredString(font, title.getFormattedText(), width / 2, height / 3, 16777215);
-        super.render(x, y, partialTicks);
+    public void render(MatrixStack matrix, int x, int y, float partialTicks) {
+        renderBackground(matrix);
+        drawCenteredString(matrix, font, title.getString(), width / 2, height / 3, 16777215);
+        super.render(matrix, x, y, partialTicks);
     }
 }

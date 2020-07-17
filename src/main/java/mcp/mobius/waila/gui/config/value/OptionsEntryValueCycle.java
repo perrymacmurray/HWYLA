@@ -1,8 +1,11 @@
 package mcp.mobius.waila.gui.config.value;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,7 +24,7 @@ public class OptionsEntryValueCycle extends OptionsEntryValue<String> {
         this.translationKey = optionName;
         this.createLocale = createLocale;
         List<String> vals = Arrays.asList(values);
-        this.button = new Button(0, 0, 100, 20, createLocale ? I18n.format(optionName + "_" + selected.replace(" ", "_").toLowerCase(Locale.ROOT)) : selected, w -> {
+        this.button = new Button(0, 0, 100, 20, createLocale ? new TranslationTextComponent(I18n.format(optionName + "_" + selected.replace(" ", "_").toLowerCase(Locale.ROOT))) : new StringTextComponent(selected), w -> {
             value = vals.get((vals.indexOf(value) + 1) % vals.size());
         });
         this.value = selected;
@@ -35,8 +38,8 @@ public class OptionsEntryValueCycle extends OptionsEntryValue<String> {
     protected void drawValue(int entryWidth, int entryHeight, int x, int y, int mouseX, int mouseY, boolean selected, float partialTicks) {
         this.button.x = x + 135;
         this.button.y = y + entryHeight / 6;
-        this.button.setMessage(createLocale ? I18n.format(translationKey + "_" + value.replace(" ", "_").toLowerCase(Locale.ROOT)) : value);
-        this.button.render(mouseX, mouseY, partialTicks);
+        this.button.setMessage(createLocale ? new TranslationTextComponent(I18n.format(translationKey + "_" + value.replace(" ", "_").toLowerCase(Locale.ROOT))) : new StringTextComponent(value));
+        this.button.render(new MatrixStack(), mouseX, mouseY, partialTicks); //TODO matrixstack
     }
 
     @Override
